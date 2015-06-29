@@ -68,7 +68,7 @@ define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
  * since the exeuctable name is appended to the path. If not defined,
  * the executables must be on the PATH
  */
-define('BIBUTILS_PATH','/usr/local/bin/');
+define('BIBUTILS_PATH','/usr/bin/');
 
 /*
  * The mail server. If not defined, localhost is used
@@ -104,7 +104,9 @@ if ( ! defined( "QCL_APPLICATION_MODE") )
 /*
  * log defaults. by default, no log messages
  */
-define("APPLICATION_LOG_DEFAULT", serialize( array()));
+define("APPLICATION_LOG_DEFAULT", serialize( array(
+  "QCL_LOG_SETUP"
+)));
 
 //-------------------------------------------------------------
 // PHP configuration
