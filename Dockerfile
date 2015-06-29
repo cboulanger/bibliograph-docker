@@ -38,6 +38,7 @@ ENV BIB_CONF /var/www/html/bibliograph/services/config/
 # add configuration files
 ADD bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
 ADD server.conf.php $BIB_CONF/server.conf.php
+ADD plugins.txt /var/www/html/bibliograph/plugins.txt
 
 # add a redirection script
 RUN echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php

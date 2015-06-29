@@ -21,7 +21,7 @@ mysql -uroot -e "CREATE DATABASE bibliograph_tmp;"
 
 mysqladmin -uroot shutdown
 
-echo "Bibliograph server ready at https://localhost" 
+echo "Bibliograph server ready." 
 
 exec supervisord -n
 
