@@ -30,6 +30,7 @@ RUN a2enmod ssl
 RUN a2enmod socache_shmcb
 
 # download latest version from Sourceforge
+RUN rm -rf /var/www/html/*
 RUN wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download \
   && unzip tmp.zip -d /var/www/html && rm tmp.zip
 ENV BIB_CONF /var/www/html/bibliograph/services/config/
