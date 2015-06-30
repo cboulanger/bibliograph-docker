@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# create databases
-echo "Setting up databases ..."
+echo
+echo "Setting up MySql database ..."
 
 /usr/bin/mysqld_safe > /dev/null 2>&1 &
 
 RET=1
 while [[ RET -ne 0 ]]; do
-    echo "=> Waiting for confirmation of MySQL service startup"
+    echo -n "."
     sleep 5
     mysql -uroot -e "status" > /dev/null 2>&1
     RET=$?
@@ -21,7 +21,8 @@ mysql -uroot -e "CREATE DATABASE bibliograph_tmp;"
 
 mysqladmin -uroot shutdown
 
-echo "Bibliograph server ready." 
+echo
+echo "Server ready." 
 
 exec supervisord -n
 
