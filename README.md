@@ -37,6 +37,7 @@ Configuration and use
 ---------------------
 The image is configured to install all plugins shipped with the release.
 You can log with the following credentials (username/password):
+
 - user/user
 - manager/manager
 - admin/amdin
