@@ -40,7 +40,7 @@ You can log with the following credentials (username/password):
 
 - user/user
 - manager/manager
-- admin/amdin
+- admin/admin
 
 Issues:
 -------
