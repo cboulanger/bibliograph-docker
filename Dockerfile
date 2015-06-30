@@ -1,5 +1,5 @@
 # Bibliograph - Online Bibliographic Data Manager
-# Build the current master from Github
+# Build the latest version published on http://souratceforge.net/projects/bibliograph/files/
 
 FROM ubuntu:latest
 MAINTAINER Christian Boulanger <info@bibliograph.org>
@@ -32,10 +32,10 @@ RUN a2enmod socache_shmcb
 # download latest version from Sourceforge
 RUN rm -rf /var/www/html/*
 RUN wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download \
-  && unzip tmp.zip -d /var/www/html && rm tmp.zip
-ENV BIB_CONF /var/www/html/bibliograph/services/config/
-
+  && unzip tmp.zip -d /var/www/html && rm tmp.zip && echo "..."
+  
 # add configuration files
+ENV BIB_CONF /var/www/html/bibliograph/services/config/
 ADD bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
 ADD server.conf.php $BIB_CONF/server.conf.php
 ADD plugins.txt /var/www/html/bibliograph/plugins.txt
