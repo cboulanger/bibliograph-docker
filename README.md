@@ -14,8 +14,8 @@ On Mac and Windows, use [Kitematic](https://kitematic.com/) to run the image.
 
 On Linux or if you like the command line, download and build the container with
 ```
-sudo docker pull cboulanger/bibliograph .
-sudo docker build -t cboulanger/bibliograph
+sudo docker pull cboulanger/bibliograph
+sudo docker build -t cboulanger/bibliograph .
 ```
 and run it with
 ```
