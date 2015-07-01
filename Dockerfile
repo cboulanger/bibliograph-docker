@@ -18,30 +18,29 @@ RUN apt-get update && apt-get install -y \
   zip
 
 # Install php-yaz
-RUN pecl install yaz
-RUN pear install Structures_LinkedList-0.2.2
-RUN pear install File_MARC
-RUN echo "extension=yaz.so" >> /etc/php5/apache2/php.ini
-RUN echo "extension=yaz.so" >> /etc/php5/cli/php.ini
+RUN pecl install yaz && \
+  pear install Structures_LinkedList-0.2.2 && \
+  pear install File_MARC && \
+  echo "extension=yaz.so" >> /etc/php5/apache2/php.ini && \
+  echo "extension=yaz.so" >> /etc/php5/cli/php.ini
 
 # enable SSL
-RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-default-ssl
-RUN a2enmod ssl
-RUN a2enmod socache_shmcb
+RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-default-ssl && \
+  a2enmod ssl && a2enmod socache_shmcb
 
-# download latest version from Sourceforge
-RUN rm -rf /var/www/html/*
-RUN wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download \
-  && unzip tmp.zip -d /var/www/html && rm tmp.zip && echo "..."
+# download and install latest version from Sourceforge
+# to get around the docker build cache, modify the last echo statement
+RUN rm -rf /var/www/html/* && \
+  wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download \
+  && unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
+  echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
+  echo "Installed bibliograph ..."
   
 # add configuration files
 ENV BIB_CONF /var/www/html/bibliograph/services/config/
 ADD bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
 ADD server.conf.php $BIB_CONF/server.conf.php
 ADD plugins.txt /var/www/html/bibliograph/plugins.txt
-
-# add a redirection script
-RUN echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php
 
 # supervisor files
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
