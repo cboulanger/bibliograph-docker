@@ -6,11 +6,6 @@ FROM ubuntu:latest
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV BIB_VAR_DIR /var/lib/bibliograph
-ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
-ENV BIB_USE_EXT_MYSQL no
-ENV BIB_EXT_MYSQL_USER nobody
-ENV BIB_EXT_MYSQL_PASSWORD secret
 
 # Packages
 RUN apt-get update && apt-get install -y \
@@ -33,6 +28,13 @@ RUN pecl install yaz && \
 # enable SSL
 RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-default-ssl && \
   a2enmod ssl && a2enmod socache_shmcb
+  
+# Environment variables for the setup
+ENV BIB_VAR_DIR /var/lib/bibliograph
+ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
+ENV BIB_USE_EXT_MYSQL no
+ENV BIB_MYSQL_USER root
+ENV BIB_MYSQL_PASSWORD secret
 
 # download and install latest version from Sourceforge
 # to get around the docker build cache, modify the last echo statement
