@@ -6,6 +6,11 @@ FROM ubuntu:latest
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV BIB_VAR_DIR /var/lib/bibliograph
+ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
+ENV BIB_USE_EXT_MYSQL no
+ENV BIB_EXT_MYSQL_USER nobody
+ENV BIB_EXT_MYSQL_PASSWORD secret
 
 # Packages
 RUN apt-get update && apt-get install -y \
@@ -31,7 +36,7 @@ RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-de
 
 # download and install latest version from Sourceforge
 # to get around the docker build cache, modify the last echo statement
-ENV BIB_VAR_DIR /var/lib/bibliograph
+
 RUN rm -rf /var/www/html/* && \
   wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download && \
   unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
@@ -40,9 +45,8 @@ RUN rm -rf /var/www/html/* && \
   echo "Installed bibliograph ..."
   
 # add configuration files
-ENV BIB_CONF /var/www/html/bibliograph/services/config/
-COPY bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
-COPY server.conf.php $BIB_CONF/server.conf.php
+COPY bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
+COPY server.conf.php $BIB_CONF_DIR/server.conf.php
 COPY plugins.txt /var/www/html/bibliograph/plugins.txt
 
 # supervisor files
@@ -57,7 +61,8 @@ COPY run.sh /run.sh
 COPY start-apache2.sh /start-apache2.sh
 COPY start-mysqld.sh /start-mysqld.sh
 
-# mount volumes for debugging
+# mount volumes 
+VOLUME /var/lib/mysql # to persist data in the filesystem
 #VOLUME /var/log/apache2
 #VOLUME /tmp
 
