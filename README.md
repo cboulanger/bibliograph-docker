@@ -1,9 +1,10 @@
 Bibliograph Docker Image
 ========================
 
-This is a preconfigured image of Bibliograph running in an Ubuntu container,
-a good way to test the application. The docker setup is very simple and should not
-be used in production. 
+This is a preconfigured image of the web-based bibliographic data manager [Bibliograph](http://www.bibliograph.org) 
+running in an Ubuntu container. It provides an easy way to try the application out and see whether it 
+provides what you need. The docker setup is simple and should not be used in production. 
+Improvements are very welcome.
 
 The code is the latest version published at [Sourceforge](http://sourceforge.net/projects/bibliograph/files/).
 
@@ -25,13 +26,11 @@ and run it with
 docker run –rm -p 80:80 cboulanger/bibliograph
 ```
 
-If you want to be able to shut it down quickly, or with
+if you want to be able to shut it down quickly. For a detached process, use
 
 ```
 docker run -d -p 80:80 cboulanger/bibliograph
 ```
-
-for a detached process. 
 
 Configuration and use
 ---------------------
@@ -47,5 +46,4 @@ Issues:
 - https-access on port 443 doesn't work yet. 
 
 If you can improve the docker setup, fork the code and share an improved version. 
-A safe and stable production setup with data persistence and backup would be
-very welcome. 
+A safe and stable production setup with data persistence and backup is sorely needed.
