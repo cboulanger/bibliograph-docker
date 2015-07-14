@@ -50,12 +50,12 @@ define("APPLICATION_CLASS_PATH", SERVER_ROOT . "/class/");
  */
 if ( ! defined("QCL_VAR_DIR") )
 {
-  define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
+  define( "QCL_VAR_DIR" ,  "/var/lib/bibliograph" );
 }
 
 /*
  * where should the application log to. By default
- * the log file is "bibliograph.log" in the system temp folder.
+ * the log file is "bibliograph.log"
  */
 define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
 

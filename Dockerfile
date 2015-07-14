@@ -1,5 +1,6 @@
 # Bibliograph - Online Bibliographic Data Manager
 # Build the latest version published on http://souratceforge.net/projects/bibliograph/files/
+# todo: use MarvAmBass/docker-apache2-ssl-secure or similar image as base
 
 FROM ubuntu:latest
 MAINTAINER Christian Boulanger <info@bibliograph.org>
@@ -30,35 +31,39 @@ RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-de
 
 # download and install latest version from Sourceforge
 # to get around the docker build cache, modify the last echo statement
+ENV BIB_VAR_DIR /var/lib/bibliograph
 RUN rm -rf /var/www/html/* && \
-  wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download \
-  && unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
+  wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download && \
+  unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
   echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
+  mkdir $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR && \
   echo "Installed bibliograph ..."
   
 # add configuration files
 ENV BIB_CONF /var/www/html/bibliograph/services/config/
-ADD bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
-ADD server.conf.php $BIB_CONF/server.conf.php
-ADD plugins.txt /var/www/html/bibliograph/plugins.txt
+COPY bibliograph.ini.php $BIB_CONF/bibliograph.ini.php
+COPY server.conf.php $BIB_CONF/server.conf.php
+COPY plugins.txt /var/www/html/bibliograph/plugins.txt
 
 # supervisor files
-ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
-ADD supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
-
-# mount volumes for debugging
-VOLUME /var/log/apache2
-VOLUME /tmp
+COPY supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
+COPY supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
 
 # add mysqld configuration
-ADD my.cnf /etc/mysql/conf.d/my.cnf
+COPY my.cnf /etc/mysql/conf.d/my.cnf
+
+# Start command
+COPY run.sh /run.sh
+COPY start-apache2.sh /start-apache2.sh
+COPY start-mysqld.sh /start-mysqld.sh
+
+# mount volumes for debugging
+#VOLUME /var/log/apache2
+#VOLUME /tmp
 
 # Expose ports
 EXPOSE 80 443
 
-# Start command
-ADD run.sh /run.sh
-ADD start-apache2.sh /start-apache2.sh
-ADD start-mysqld.sh /start-mysqld.sh
+# Run
 RUN chmod 755 /*.sh
 CMD ["/run.sh"]
