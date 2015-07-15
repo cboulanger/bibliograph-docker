@@ -7,10 +7,6 @@ MAINTAINER Christian Boulanger <info@bibliograph.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# mount volumes 
-VOLUME /var/lib/mysql # use this volume to persist data in the host filesystem
-VOLUME /var/lib/bibliograph # This exposes temporary and cached data
-
 # Packages
 RUN apt-get update && apt-get install -y \
   supervisor apache2 libapache2-mod-php5 php5-cli \
@@ -29,14 +25,14 @@ RUN pecl install yaz && \
   echo "extension=yaz.so" >> /etc/php5/apache2/php.ini && \
   echo "extension=yaz.so" >> /etc/php5/cli/php.ini
 
-# enable SSL
+# enable SSL, not working
 RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-default-ssl && \
   a2enmod ssl && a2enmod socache_shmcb
   
 # Environment variables for the setup
 ENV BIB_VAR_DIR /var/lib/bibliograph
 ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
-ENV BIB_USE_EXT_MYSQL no
+ENV BIB_USE_HOST_MYSQL no
 ENV BIB_MYSQL_USER root
 ENV BIB_MYSQL_PASSWORD secret
 
@@ -47,7 +43,7 @@ RUN rm -rf /var/www/html/* && \
   wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download && \
   unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
   echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
-  mkdir $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR && \
+  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR && \
   echo "Installed bibliograph ..."
   
 # add configuration files

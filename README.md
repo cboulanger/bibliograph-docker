@@ -20,16 +20,52 @@ sudo docker pull cboulanger/bibliograph
 sudo docker build -t cboulanger/bibliograph .
 ```
 
-and run it with
+If you just want to test the software, run
 
 ```
-docker run –rm -p 80:80 cboulanger/bibliograph
+sudo docker run --rm -p 80:80 cboulanger/bibliograph
 ```
 
-if you want to be able to shut it down quickly. For a detached process, use
+This will remove the container and its data when you shut down the process.
+
+For a daemonized process, run
 
 ```
-docker run -d -p 80:80 cboulanger/bibliograph
+sudo docker run -d -p 80:80 cboulanger/bibliograph
+```
+
+Data persistence
+----------------
+
+By default, the data of the container is insulated inside the container and gone 
+whe you remove the container. If you wan to access or backup this data, you can either
+mount the data directories to the host, use a mysql server on the host to store 
+the application data, or use a different container to store the data. Here, I only
+address the first two options (even though best practice seems to be the third option).
+
+a) If you want to access or store the container data, mount the mysql data directory
+and the directory containing temporary and cached data by adding these options to your
+`docker run` command:
+
+```
+docker run ... \
+ -v /opt/bibliograph/mysql-data:/var/lib/mysql \
+ -v /opt/bibliograph/other-data:/var/lib/bibliograph \
+  ...
+```
+
+Replace /opt/bibliograph/XXX with the path to directories you want to use on the host.
+
+NOTE: This should be working according to the Docker Docs and according to Google, 
+but is NOT working in my setup (Ubuntu 15.04): the mysql server doesn't start. Any ideas?
+
+b) If the data should not be stored in the mysql server of the container, but instead
+in an existing mysql server on the host, you can set the following environment variables:
+
+```
+docker run .... \
+ -e "BIB_USE_HOST_MYSQL=yes" -e "BIB_MYSQL_USER=root" -e "BIB_MYSQL_PASSWORD=secret" \
+ ...
 ```
 
 Configuration and use
