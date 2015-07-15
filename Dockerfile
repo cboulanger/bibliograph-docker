@@ -6,13 +6,10 @@ FROM ubuntu:latest
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV BIB_VAR_DIR /var/lib/bibliograph
 
 # mount volumes 
 VOLUME /var/lib/mysql # use this volume to persist data in the host filesystem
-VOLUME $BIB_VAR_DIR # This exposes temporary and cached data
-#VOLUME /var/log/apache2
-#VOLUME /tmp
+VOLUME /var/lib/bibliograph # This exposes temporary and cached data
 
 # Packages
 RUN apt-get update && apt-get install -y \
@@ -37,6 +34,7 @@ RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-de
   a2enmod ssl && a2enmod socache_shmcb
   
 # Environment variables for the setup
+ENV BIB_VAR_DIR /var/lib/bibliograph
 ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
 ENV BIB_USE_EXT_MYSQL no
 ENV BIB_MYSQL_USER root
