@@ -25,11 +25,10 @@ if [ "$BIB_USE_HOST_MYSQL" = "yes" ]; then
   AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOSTIP"
 fi
 
-mysql $AUTH_ARGS -e "CREATE USER 'bibliograph'@'$CONTAINERIP' IDENTIFIED BY 'bibliograph';"
-mysql $AUTH_ARGS -e "CREATE DATABASE bibliograph_admin;"
-mysql $AUTH_ARGS -e "CREATE DATABASE bibliograph_user;"
-mysql $AUTH_ARGS -e "CREATE DATABASE bibliograph_tmp;"
-mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO 'bibliograph'@'$CONTAINERIP' WITH GRANT OPTION;"
+mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_admin;"
+mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_user;"
+mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_tmp;"
+mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO 'bibliograph'@'$CONTAINERIP' IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
 
 if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
   mysqladmin -uroot shutdown
