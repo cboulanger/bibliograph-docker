@@ -21,7 +21,7 @@ if [ "$BIB_USE_HOST_MYSQL" = "yes" ]; then
   HOSTIP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
   CONTAINERIP=$(hostname --ip-address)
   echo "Accessing MySql Server on Host ($HOSTIP) from $CONTAINERIP"
-  sed -i.bak 's/0\.0\.0\.0/$HOSTIP/' $BIB_CONF_DIR/bibliograph.ini.php
+  sed -i.bak "s/0\.0\.0\.0/$HOSTIP/" $BIB_CONF_DIR/bibliograph.ini.php
   AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOSTIP"
 fi
 
