@@ -2,18 +2,18 @@ Bibliograph Docker Image
 ========================
 
 This is a preconfigured image of the web-based bibliographic data manager [Bibliograph](http://www.bibliograph.org) 
-running in an Ubuntu container. It provides an easy way to try the application out and see whether it 
+running in an Ubuntu container. It's an easy way to try the application out and see whether it 
 provides what you need. The docker setup is simple and should not be used in production. 
 Improvements are very welcome.
 
-The code is the latest version published at [Sourceforge](http://sourceforge.net/projects/bibliograph/files/).
+The container uses the latest version of Bibliograph published at [Sourceforge](http://sourceforge.net/projects/bibliograph/files/).
 
 Building and running of the Image
 ---------------------------------
 
 On Mac and Windows, use [Kitematic](https://kitematic.com/) to run the image.
 
-On Linux or if you like the command line, download and build the container with
+On Linux, or if you like the command line, download and build the container with
 
 ```
 sudo docker pull cboulanger/bibliograph
@@ -38,9 +38,9 @@ Data persistence
 ----------------
 
 By default, the data of the container is insulated inside the container and gone 
-whe you remove the container. If you wan to access or backup this data, you can either
-mount the data directories to the host, use a mysql server on the host to store 
-the application data, or use a different container to store the data. Here, I only
+whe you remove the container. If you wan to access or backup this data, you can a)
+mount the data directories to the host, b) use a mysql server on the host to store 
+the application data, or c) use a different container to store the data. Here, I only
 address the first two options (even though best practice seems to be the third option).
 
 a) If you want to access or store the container data, mount the mysql data directory
