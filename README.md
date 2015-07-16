@@ -64,9 +64,14 @@ in an existing mysql server on the host, you can set the following environment v
 
 ```
 docker run .... \
- -e "BIB_USE_HOST_MYSQL=yes" -e "BIB_MYSQL_USER=root" -e "BIB_MYSQL_PASSWORD=secret" \
+ -e "BIB_USE_HOST_MYSQL=yes" -e "BIB_MYSQL_USER=superuser" -e "BIB_MYSQL_PASSWORD=secret" \
  ...
 ```
+Replace "superuser" and "secret" with the real username and password of a MySql user that
+is allowed to log in from everywhere and has all privileges. You might have to create such a
+user first in the database and you can safely delete this newly-created user afterwards. The
+user account is only needed to create the database tables and a "bibliograph" user which
+is allowed to log in only from the docker container's IP address.
 
 Configuration and use
 ---------------------
@@ -77,9 +82,13 @@ You can log with the following credentials (username/password):
 - manager/manager
 - admin/admin
 
+Please change the password of the admin account immediately by clicking on the "Administrator" button
+on the top left side and delete the "user" and "manager" accounts if you dont need them (via the [Access Control Tool](https://sites.google.com/a/bibliograph.org/docs-v2-en/administration/access-control)).
+
 Issues:
 -------
 - https-access on port 443 doesn't work yet. 
 
-If you can improve the docker setup, fork the code and share an improved version. 
-A safe and stable production setup with data persistence and backup is sorely needed.
+If you can improve the docker setup, fork the code and share an improved version.
+In particular, SSL support is needed:  through a user-supplied certificate with 
+a fallback to a self-signed, automatically generated certificate.
