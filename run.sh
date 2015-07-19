@@ -15,6 +15,7 @@ if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
       RET=$?
   done
   AUTH_ARGS="-u$BIB_MYSQL_USER"
+  GRANTEE="'bibliograph'"
 fi
 
 # use the host mysql server
@@ -23,12 +24,13 @@ if [ "$BIB_USE_HOST_MYSQL" = "yes" ]; then
   echo "Accessing MySql Server on $HOST_IP from $CLIENT_IP"
   sed -i.bak "s/0\.0\.0\.0/$HOST_IP/" $BIB_CONF_DIR/bibliograph.ini.php
   AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOST_IP"
+  GRANTEE="'bibliograph'@'$CLIENT_IP'"
 fi
 
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_admin;"
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_user;"
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_tmp;"
-mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO 'bibliograph'@'$CLIENT_IP' IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
+mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO $GRANTEE IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
 
 if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
   mysqladmin -uroot shutdown
