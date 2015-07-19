@@ -2,6 +2,7 @@
 
 echo
 echo "Setting up MySql database ..."
+CLIENT_IP=$(hostname --ip-address)
 
 # use the container mysql server
 if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
@@ -18,17 +19,16 @@ fi
 
 # use the host mysql server
 if [ "$BIB_USE_HOST_MYSQL" = "yes" ]; then
-  HOSTIP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
-  CONTAINERIP=$(hostname --ip-address)
-  echo "Accessing MySql Server on Host ($HOSTIP) from $CONTAINERIP"
-  sed -i.bak "s/0\.0\.0\.0/$HOSTIP/" $BIB_CONF_DIR/bibliograph.ini.php
-  AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOSTIP"
+  HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
+  echo "Accessing MySql Server on $HOST_IP from $CLIENT_IP"
+  sed -i.bak "s/0\.0\.0\.0/$HOST_IP/" $BIB_CONF_DIR/bibliograph.ini.php
+  AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOST_IP"
 fi
 
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_admin;"
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_user;"
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_tmp;"
-mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO 'bibliograph'@'$CONTAINERIP' IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
+mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO 'bibliograph'@'$CLIENT_IP' IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
 
 if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
   mysqladmin -uroot shutdown
