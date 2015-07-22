@@ -38,10 +38,10 @@ Data persistence
 ----------------
 
 By default, the data of the container is insulated inside the container and gone 
-whe you remove the container. If you wan to access or backup this data, you can a)
+when you remove the container. If you want to access or backup this data, you can a)
 mount the data directories to the host, b) use a mysql server on the host to store 
 the application data, or c) use a different container to store the data. Here, I only
-address the first two options (even though best practice seems to be the third option).
+address the first two options (even though the third option seems to be best practice).
 
 a) If you want to access or store the container data, mount the mysql data directory
 and the directory containing temporary and cached data by adding these options to your

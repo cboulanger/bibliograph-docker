@@ -1,11 +1,11 @@
 #!/bin/bash
 
 echo
-echo "Setting up MySql database ..."
 CLIENT_IP=$(hostname --ip-address)
 
 # use the container mysql server
-if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
+if [ "${BIB_USE_HOST_MYSQL:=no}" = "no" ]; then
+  echo "Waiting for MySql database to start..."
   /usr/bin/mysqld_safe > /dev/null 2>&1 &
   RET=1
   while [[ RET -ne 0 ]]; do
@@ -32,7 +32,7 @@ mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_user;"
 mysql $AUTH_ARGS -e "CREATE DATABASE IF NOT EXISTS bibliograph_tmp;"
 mysql $AUTH_ARGS -e "GRANT ALL PRIVILEGES ON \`bibliograph\_%\`.* TO $GRANTEE IDENTIFIED BY 'bibliograph' WITH GRANT OPTION;"
 
-if [ "$BIB_USE_HOST_MYSQL" = "no" ]; then
+if [ "${BIB_USE_HOST_MYSQL:=no}" = "no" ]; then
   mysqladmin -uroot shutdown
 fi
 
