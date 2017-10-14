@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
   wget \
   php5-xsl php5-intl\
   yaz libyaz4-dev \
-  zip
+  zip \
+  git
 
 # Install php-yaz
 RUN pecl install yaz && \
@@ -38,13 +39,14 @@ ENV BIB_MYSQL_PASSWORD secret
 
 # checkout the bibliograph's master branch on GitHub and build qooxdoo app
 RUN rm -rf /var/www/html/* && \
-  wget -qO- -O tmp.zip https://github.com/cboulanger/bibliograph/archive/master.zip && \
-  unzip -qq tmp.zip -d . && rm tmp.zip && \
-  cd bibliograph-master/bibliograph && \
+  git clone https://github.com/cboulanger/bibliograph.git && \
+  cd bibliograph && \
+  git clone https://github.com/qooxdoo/qooxdoo.git && \
+  cd bibliograph && \
   ./generate.py build 
 
 # publish code
-RUN ln -s ./build /var/www/html/bibliograph && \
+RUN ln -s bibliograph/bibliograph/build /var/www/html/bibliograph && \
   echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
   mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR
   
