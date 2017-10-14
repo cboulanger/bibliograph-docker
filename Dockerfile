@@ -36,15 +36,16 @@ ENV BIB_USE_HOST_MYSQL no
 ENV BIB_MYSQL_USER root
 ENV BIB_MYSQL_PASSWORD secret
 
-# download and install latest version from Sourceforge
-# to get around the docker build cache, modify the last echo statement
-
+# checkout the bibliograph's master branch on GitHub and build qooxdoo app
 RUN rm -rf /var/www/html/* && \
-  wget -qO- -O tmp.zip http://sourceforge.net/projects/bibliograph/files/latest/download && \
-  unzip -qq tmp.zip -d /var/www/html && rm tmp.zip && \
-  echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
-  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR && \
-  echo "Installed bibliograph ..."
+  git clone https://github.com/cboulanger/bibliograph.git && \
+  cd bibliograph/bibliograph && \
+  ./generate.py build 
+
+# publish code
+RUN ln -s bibliograph/bibliograph/build /var/www/html/bibliograph && \
+  echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
+  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR
   
 # add configuration files
 COPY bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
