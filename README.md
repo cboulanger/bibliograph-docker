@@ -6,7 +6,7 @@ running in an Ubuntu container. It's an easy way to try the application out and 
 provides what you need. The docker setup is simple and should not be used in production. 
 Improvements are very welcome.
 
-The container uses the latest version of Bibliograph published at [Sourceforge](http://sourceforge.net/projects/bibliograph/files/).
+The container uses the latest [master branch at GitHub](https://github.com/cboulanger/bibliograph/tree/master)
 
 Building and running of the Image
 ---------------------------------
