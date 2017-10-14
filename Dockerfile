@@ -2,7 +2,7 @@
 # Build the latest version published on http://souratceforge.net/projects/bibliograph/files/
 # todo: use MarvAmBass/docker-apache2-ssl-secure or similar image as base
 
-FROM ubuntu:latest
+FROM ubuntu:16:04
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 
 ENV DEBIAN_FRONTEND noninteractive
