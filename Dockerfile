@@ -47,7 +47,7 @@ RUN rm -rf /var/www/html/* && \
   mv build /var/www/html/bibliograph && \
   cd ../.. && rm -rf bibliograph && \
   echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
-  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR &&  
+  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR 
   
 # add configuration files
 COPY bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
