@@ -38,7 +38,8 @@ ENV BIB_MYSQL_PASSWORD secret
 
 # checkout the bibliograph's master branch on GitHub and build qooxdoo app
 RUN rm -rf /var/www/html/* && \
-  git clone https://github.com/cboulanger/bibliograph.git && \
+  wget -qO- -O tmp.zip https://github.com/cboulanger/bibliograph/archive/master.zip && \
+  unzip -qq tmp.zip -d . && rm tmp.zip && \
   cd bibliograph/bibliograph && \
   ./generate.py build 
 
