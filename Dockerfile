@@ -43,10 +43,8 @@ RUN rm -rf /var/www/html/* && \
   cd bibliograph && \
   git clone https://github.com/qooxdoo/qooxdoo.git && \
   cd bibliograph && \
-  ./generate.py build 
-
-# publish code
-RUN ln -s bibliograph/bibliograph/build /var/www/html/bibliograph && \
+  ./generate.py -I build && \
+  ln -s bibliograph/bibliograph/build /var/www/html/bibliograph && \
   echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
   mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR
   
