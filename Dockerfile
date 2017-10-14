@@ -40,11 +40,11 @@ ENV BIB_MYSQL_PASSWORD secret
 RUN rm -rf /var/www/html/* && \
   wget -qO- -O tmp.zip https://github.com/cboulanger/bibliograph/archive/master.zip && \
   unzip -qq tmp.zip -d . && rm tmp.zip && \
-  cd bibliograph/bibliograph && \
+  cd bibliograph-master/bibliograph && \
   ./generate.py build 
 
 # publish code
-RUN ln -s bibliograph/bibliograph/build /var/www/html/bibliograph && \
+RUN ln -s ./build /var/www/html/bibliograph && \
   echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
   mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR
   
