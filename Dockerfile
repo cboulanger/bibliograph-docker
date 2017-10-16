@@ -1,5 +1,5 @@
 # Bibliograph - Online Bibliographic Data Manager
-# Build the latest version published on http://souratceforge.net/projects/bibliograph/files/
+# Build the latest GitHub master
 # todo: use MarvAmBass/docker-apache2-ssl-secure or similar image as base
 
 FROM ubuntu:14.04
@@ -47,9 +47,10 @@ RUN rm -rf /var/www/html/* && \
   git clone https://github.com/qooxdoo/qooxdoo.git && \
   cd bibliograph && \
   ./generate.py -I build && \
+  mkdir /var/www/html/bibliograph && \
   mv build /var/www/html/bibliograph && \
   cd ../.. && rm -rf bibliograph && \
-  echo "<?php header('location: /bibliograph');" > /var/www/html/index.php && \
+  echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
   mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR 
   
 # add configuration files
