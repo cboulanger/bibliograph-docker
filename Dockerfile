@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
   yaz libyaz4-dev \
   zip
 
+# Fix mysql problem with overlayfs, see https://github.com/docker/for-linux/issues/72
+RUN find /var/lib/mysql -type f -exec touch {} \;
+
 # Install php-yaz
 RUN pecl install yaz && \
   pear install Structures_LinkedList-0.2.2 && \
