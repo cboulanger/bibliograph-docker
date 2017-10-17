@@ -6,6 +6,9 @@ CLIENT_IP=$(hostname --ip-address)
 # use the container mysql server
 if [ "${BIB_USE_HOST_MYSQL:=no}" = "no" ]; then
   echo "Waiting for MySql database to start..."
+  # fix mysql problem with overlayfs, see https://github.com/docker/for-linux/issues/72
+  find /var/lib/mysql -type f -exec touch {} \;
+  # start mysql process  
   /usr/bin/mysqld_safe > /dev/null 2>&1 &
   RET=1
   while [[ RET -ne 0 ]]; do
