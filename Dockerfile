@@ -44,6 +44,7 @@ RUN rm -rf /var/www/html/* && \
   git clone https://github.com/qooxdoo/qooxdoo.git && \
   cd bibliograph && \
   ./generate.py -I build && \
+  ./generate.py -I source-hybrid && \
   cd .. && \
   mv bibliograph /var/www/html && \
   cd ../.. && rm -rf bibliograph && \
